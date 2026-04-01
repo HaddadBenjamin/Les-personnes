@@ -68,10 +68,16 @@ export function PersonnelSection({ data, onToggle, onAdd, onDelete, onAddSection
           👕 S'habiller
         </button>
         <button
-          className={`tab-btn ${activeMainTab === 'cave' ? 'active' : ''}`}
-          onClick={() => setActiveMainTab('cave')}
+          className={`tab-btn ${activeMainTab === 'vincennes' ? 'active' : ''}`}
+          onClick={() => setActiveMainTab('vincennes')}
         >
-          📦 Ma Cave
+          🏡 Vincennes
+        </button>
+        <button
+          className={`tab-btn ${activeMainTab === 'sport' ? 'active' : ''}`}
+          onClick={() => setActiveMainTab('sport')}
+        >
+          🏋️ Sport
         </button>
       </div>
 
@@ -244,51 +250,168 @@ export function PersonnelSection({ data, onToggle, onAdd, onDelete, onAddSection
         </div>
       )}
 
-      {activeMainTab === 'cave' && (
-        <div className="card" style={{ animation: 'fadeIn 0.3s ease', maxWidth: '600px', margin: '0 auto' }}>
+      {activeMainTab === 'vincennes' && (
+        <div className="card" style={{ animation: 'fadeIn 0.3s ease', maxWidth: '800px', margin: '0 auto' }}>
           <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            📦 Contenu de la cave
+            🏡 Vincennes
           </h3>
           
-          <div className="glass-panel" style={{ marginBottom: '1.5rem' }}>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              {caveItems.map((item, i) => (
-                <li key={item.id} style={{ 
-                  padding: '0.8rem 0', 
-                  borderBottom: i !== caveItems.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  fontSize: '1.05rem'
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                    <span style={{ color: 'var(--accent)', fontSize: '1.2rem' }}>•</span> 
-                    <span>{item.text}</span>
-                  </div>
-                  <button className="btn-ghost" style={{ border: 'none', padding: '4px' }} onClick={() => handleDeleteCaveItem(item.id)}>
-                    <Trash2 size={16} />
-                  </button>
-                </li>
-              ))}
-              {caveItems.length === 0 && (
-                <p style={{ color: 'var(--text-muted)', textAlign: 'center', padding: '1rem 0', margin: 0 }}>La cave est vide.</p>
-              )}
-            </ul>
-          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', alignItems: 'start' }}>
+            
+            {/* Cave CRUD */}
+            <div>
+              <div className="glass-panel" style={{ marginBottom: '1rem' }}>
+                <h4 style={{ color: 'var(--primary)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  📦 Contenu de la cave
+                </h4>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                  {caveItems.map((item, i) => (
+                    <li key={item.id} style={{ 
+                      padding: '0.6rem 0', 
+                      borderBottom: i !== caveItems.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      fontSize: '0.95rem'
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                        <span style={{ color: 'var(--accent)', fontSize: '1rem' }}>•</span> 
+                        <span>{item.text}</span>
+                      </div>
+                      <button className="btn-ghost" style={{ border: 'none', padding: '4px' }} onClick={() => handleDeleteCaveItem(item.id)}>
+                        <Trash2 size={16} />
+                      </button>
+                    </li>
+                  ))}
+                  {caveItems.length === 0 && (
+                    <p style={{ color: 'var(--text-muted)', textAlign: 'center', padding: '1rem 0', margin: 0 }}>La cave est vide.</p>
+                  )}
+                </ul>
+              </div>
 
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <input 
-              type="text" 
-              placeholder="Ajouter un objet dans la cave..." 
-              className="glass-panel" 
-              style={{ flex: 1, border: '1px solid var(--surface-border)', color: 'white', padding: '0.5rem' }}
-              value={newCaveItem}
-              onChange={(e) => setNewCaveItem(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleAddCaveItem()}
-            />
-            <button className="btn-primary" onClick={handleAddCaveItem}>
-              <Plus size={18} />
-            </button>
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <input 
+                  type="text" 
+                  placeholder="Ajouter un objet dans la cave..." 
+                  className="glass-panel" 
+                  style={{ flex: 1, border: '1px solid var(--surface-border)', color: 'white', padding: '0.5rem' }}
+                  value={newCaveItem}
+                  onChange={(e) => setNewCaveItem(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleAddCaveItem()}
+                />
+                <button className="btn-primary" onClick={handleAddCaveItem}>
+                  <Plus size={18} />
+                </button>
+              </div>
+            </div>
+
+            {/* Imprimantes */}
+            <div className="glass-panel">
+              <h4 style={{ color: 'var(--primary)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                🖨️ Imprimantes
+              </h4>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.8rem', background: 'rgba(0,0,0,0.2)', borderRadius: '8px' }}>
+                <span style={{ fontWeight: 'bold' }}>HP DeskJet</span>
+                <div style={{ textAlign: 'right' }}>
+                  <div><strong style={{ fontSize: '1.2rem', color: 'var(--accent)' }}>2800 Series</strong></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {activeMainTab === 'sport' && (
+        <div className="card" style={{ animation: 'fadeIn 0.3s ease' }}>
+          <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            🏋️ Meilleures performances au sport
+          </h3>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
+            
+            <div className="glass-panel">
+              <h4 style={{ color: 'var(--primary)', marginBottom: '1rem' }}>🏃 Cardio</h4>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                {[
+                  { k: 'Course', v: '8:1h20, 8.3:60, 9:40, 10:25' },
+                  { k: 'Escalier', v: '15:40, 16:30, 12:80 et 12:22 sans me tenir du tout puis 8 en se tenant, 11:80, 10:100' },
+                  { k: 'Vélo elliptique', v: '21:90, 20:1h40' },
+                  { k: 'Vélo', v: '9:55' },
+                  { k: 'Rameur', v: '30 minutes un niveau avant le max à 28' },
+                  { k: 'Marche en pente max', v: '4.2:60' },
+                  { k: 'Marche rapide', v: '7:60' }
+                ].map((item, i) => (
+                  <li key={i} style={{ marginBottom: i < 6 ? '0.6rem' : 0, borderBottom: i < 6 ? '1px solid rgba(255,255,255,0.05)' : 'none', paddingBottom: i < 6 ? '0.4rem' : 0 }}>
+                    <strong>{item.k}</strong><br />
+                    <span style={{ color: 'var(--text-muted)' }}>{item.v}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="glass-panel">
+              <h4 style={{ color: 'var(--primary)', marginBottom: '1rem' }}>💪 Pectoraux & Bras</h4>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                {[
+                  { k: 'Développé couché avec barre', v: '90:5' },
+                  { k: 'Développé couché avec barre en bas', v: '100:4, 90:8' },
+                  { k: 'Développé couché avec barre en haut', v: '70:8' },
+                  { k: 'Développé couché avec poids', v: '20:8' },
+                  { k: 'Pec 1 poids en arrière', v: '30:10' },
+                  { k: 'Tractions', v: '25:10' },
+                  { k: 'Dips', v: '40:10' },
+                  { k: 'Biceps assisté', v: '42.5:10' },
+                  { k: 'Triceps assisté', v: '47.5:10' },
+                  { k: 'Avant bras vers le haut', v: '22.5' }
+                ].map((item, i) => (
+                  <li key={i} style={{ marginBottom: i < 9 ? '0.6rem' : 0, borderBottom: i < 9 ? '1px solid rgba(255,255,255,0.05)' : 'none', paddingBottom: i < 9 ? '0.4rem' : 0 }}>
+                    <strong>{item.k}</strong> : <span style={{ color: 'var(--text-muted)' }}>{item.v}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="glass-panel">
+              <h4 style={{ color: 'var(--primary)', marginBottom: '1rem' }}>🦍 Dos & Épaules</h4>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                {[
+                  { k: 'Pull down (dos)', v: '65:10' },
+                  { k: 'Tire dos', v: '105:10' },
+                  { k: 'Low row', v: '75:10' },
+                  { k: 'Upper back', v: '85:10' },
+                  { k: 'Vertical traction', v: '70:10' },
+                  { k: 'Shoulder près', v: '95:10' },
+                  { k: 'Delts machine', v: '40:10' }
+                ].map((item, i) => (
+                  <li key={i} style={{ marginBottom: i < 6 ? '0.6rem' : 0, borderBottom: i < 6 ? '1px solid rgba(255,255,255,0.05)' : 'none', paddingBottom: i < 6 ? '0.4rem' : 0 }}>
+                    <strong>{item.k}</strong> : <span style={{ color: 'var(--text-muted)' }}>{item.v}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="glass-panel">
+              <h4 style={{ color: 'var(--primary)', marginBottom: '1rem' }}>🦵 Jambes</h4>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                {[
+                  { k: 'Presse jambe', v: '420:10' },
+                  { k: 'Squat assisté', v: '90 h' },
+                  { k: 'Soulever de terre', v: '80 h' },
+                  { k: 'Leg press', v: '200:10' },
+                  { k: 'Leg extension', v: '70' },
+                  { k: 'Leg curl', v: '45:10' },
+                  { k: 'Prone Leg Curl', v: '30:10' },
+                  { k: 'Abductor vers l’extérieure', v: '70:10' },
+                  { k: 'Abductor vers l’intérieur', v: '45:10' }
+                ].map((item, i) => (
+                  <li key={i} style={{ marginBottom: i < 8 ? '0.6rem' : 0, borderBottom: i < 8 ? '1px solid rgba(255,255,255,0.05)' : 'none', paddingBottom: i < 8 ? '0.4rem' : 0 }}>
+                    <strong>{item.k}</strong> : <span style={{ color: 'var(--text-muted)' }}>{item.v}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
           </div>
         </div>
       )}
