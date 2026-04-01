@@ -1,12 +1,38 @@
 import React, { useState } from 'react';
 import { Plus, Trash2, CheckCircle2 } from 'lucide-react';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
+
+const INITIAL_CAVE = [
+  { id: 'c1', text: 'Cartons' },
+  { id: 'c2', text: 'Ventilateur' },
+  { id: 'c3', text: 'Sapin' },
+  { id: 'c4', text: 'Guirlandes' },
+  { id: 'c5', text: 'Ordinateurs et chargeurs' },
+  { id: 'c6', text: '3 chaises' }
+];
 
 export function PersonnelSection({ data, onToggle, onAdd, onDelete, onAddSection, onDeleteSection }) {
-  const [activeMainTab, setActiveMainTab] = useState('affaires'); // 'affaires' | 'shabiller'
+  const [activeMainTab, setActiveMainTab] = useState('affaires'); // 'affaires' | 'shabiller' | 'cave'
   
   const [newSectionTitle, setNewSectionTitle] = useState('');
   const [activeChecklistId, setActiveChecklistId] = useState(data.length > 0 ? data[0].id : null);
   const [newItem, setNewItem] = useState('');
+
+  // Cave state using local storage to persist directly
+  const [caveItems, setCaveItems] = useLocalStorage('les-gens-cave', INITIAL_CAVE);
+  const [newCaveItem, setNewCaveItem] = useState('');
+
+  const handleAddCaveItem = () => {
+    if (newCaveItem.trim()) {
+      setCaveItems([...caveItems, { id: Date.now().toString(), text: newCaveItem.trim() }]);
+      setNewCaveItem('');
+    }
+  };
+
+  const handleDeleteCaveItem = (id) => {
+    setCaveItems(caveItems.filter(item => item.id !== id));
+  };
+
 
   const handleAddSection = () => {
     if (newSectionTitle.trim()) {
@@ -223,22 +249,46 @@ export function PersonnelSection({ data, onToggle, onAdd, onDelete, onAddSection
           <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             📦 Contenu de la cave
           </h3>
-          <div className="glass-panel">
+          
+          <div className="glass-panel" style={{ marginBottom: '1.5rem' }}>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              {['Cartons', 'Ventilateur', 'Sapin', 'Guirlandes', 'Ordinateurs et chargeurs', '3 chaises'].map((item, i) => (
-                <li key={i} style={{ 
+              {caveItems.map((item, i) => (
+                <li key={item.id} style={{ 
                   padding: '0.8rem 0', 
-                  borderBottom: i !== 5 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                  borderBottom: i !== caveItems.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
                   display: 'flex',
+                  justifyContent: 'space-between',
                   alignItems: 'center',
-                  gap: '0.8rem',
                   fontSize: '1.05rem'
                 }}>
-                  <span style={{ color: 'var(--accent)', fontSize: '1.2rem' }}>•</span> 
-                  <span>{item}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                    <span style={{ color: 'var(--accent)', fontSize: '1.2rem' }}>•</span> 
+                    <span>{item.text}</span>
+                  </div>
+                  <button className="btn-ghost" style={{ border: 'none', padding: '4px' }} onClick={() => handleDeleteCaveItem(item.id)}>
+                    <Trash2 size={16} />
+                  </button>
                 </li>
               ))}
+              {caveItems.length === 0 && (
+                <p style={{ color: 'var(--text-muted)', textAlign: 'center', padding: '1rem 0', margin: 0 }}>La cave est vide.</p>
+              )}
             </ul>
+          </div>
+
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <input 
+              type="text" 
+              placeholder="Ajouter un objet dans la cave..." 
+              className="glass-panel" 
+              style={{ flex: 1, border: '1px solid var(--surface-border)', color: 'white', padding: '0.5rem' }}
+              value={newCaveItem}
+              onChange={(e) => setNewCaveItem(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleAddCaveItem()}
+            />
+            <button className="btn-primary" onClick={handleAddCaveItem}>
+              <Plus size={18} />
+            </button>
           </div>
         </div>
       )}
