@@ -62,13 +62,52 @@ export function PersonnelSection({ data, onToggle, onAdd, onDelete, onAddSection
             </div>
 
             <div className="glass-panel">
-              <h4 style={{ color: 'var(--primary)', marginBottom: '1rem' }}>Mes Tailles (D'après la 1ère image)</h4>
+              <h4 style={{ color: 'var(--primary)', marginBottom: '1rem' }}>Mes Tailles Principales</h4>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.8rem', background: 'rgba(0,0,0,0.2)', borderRadius: '8px' }}>
-                <span style={{ fontWeight: 'bold' }}>👖 Pantalon</span>
+                <span style={{ fontWeight: 'bold' }}>👖 Pantalon courant</span>
                 <div style={{ textAlign: 'right' }}>
                   <div><strong style={{ fontSize: '1.2rem' }}>48 FR</strong></div>
                   <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Étiquette : 32</div>
                 </div>
+              </div>
+            </div>
+
+            {/* Guide des tailles */}
+            <div className="glass-panel" style={{ gridColumn: '1 / -1' }}>
+              <h4 style={{ color: 'var(--primary)', marginBottom: '1rem' }}>📏 Guide des Mensurations du corps</h4>
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'center', fontSize: '0.9rem' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                      <th style={{ padding: '0.8rem', fontWeight: '500', color: 'var(--text-muted)' }}>Taille de l'étiquette</th>
+                      <th style={{ padding: '0.8rem', fontWeight: '500', color: 'var(--text-muted)' }}>Taille EU</th>
+                      <th style={{ padding: '0.8rem', fontWeight: '500', color: 'var(--text-muted)' }}>Tour de taille (cm)</th>
+                      <th style={{ padding: '0.8rem', fontWeight: '500', color: 'var(--text-muted)' }}>Tour de hanches (cm)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { etiquette: 30, eu: 44, taille: '74-78', hanches: '90-94' },
+                      { etiquette: 31, eu: 46, taille: '78-82', hanches: '94-98' },
+                      { etiquette: 32, eu: 48, taille: '82-86', hanches: '98-102', highlight: true },
+                      { etiquette: 34, eu: 50, taille: '86-91', hanches: '102-107' },
+                      { etiquette: 36, eu: 52, taille: '91-96', hanches: '107-112' },
+                      { etiquette: 38, eu: 54, taille: '96-102', hanches: '112-118' },
+                      { etiquette: 40, eu: 56, taille: '102-105', hanches: '118-121' },
+                    ].map(row => (
+                      <tr key={row.etiquette} style={{ 
+                        borderBottom: '1px solid rgba(255,255,255,0.05)',
+                        backgroundColor: row.highlight ? 'rgba(255, 107, 107, 0.15)' : 'transparent',
+                        fontWeight: row.highlight ? 'bold' : 'normal',
+                      }}>
+                        <td style={{ padding: '0.8rem' }}>{row.etiquette}</td>
+                        <td style={{ padding: '0.8rem' }}>{row.eu}</td>
+                        <td style={{ padding: '0.8rem' }}>{row.taille}</td>
+                        <td style={{ padding: '0.8rem' }}>{row.hanches}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
 
