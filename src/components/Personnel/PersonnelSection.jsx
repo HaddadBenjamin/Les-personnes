@@ -3,13 +3,15 @@ import { Plus, Trash2, CheckCircle2 } from 'lucide-react';
 
 export function PersonnelSection({ data, onToggle, onAdd, onDelete, onAddSection, onDeleteSection }) {
   const [newSectionTitle, setNewSectionTitle] = useState('');
-  const [activeSubTab, setActiveSubTab] = useState(data.length > 0 ? data[0].id : null);
+  // Set default tab to "shabiller" or the first checklist
+  const [activeSubTab, setActiveSubTab] = useState('shabiller');
   const [newItem, setNewItem] = useState('');
 
   const handleAddSection = () => {
     if (newSectionTitle.trim()) {
       onAddSection(newSectionTitle.trim());
       setNewSectionTitle('');
+      setActiveSubTab('shabiller'); // switch if needed, but lets keep it simple
     }
   };
 
@@ -20,14 +22,13 @@ export function PersonnelSection({ data, onToggle, onAdd, onDelete, onAddSection
     }
   };
 
-  // Ensure an active sub-tab is set if data exists but selection is null or outdated
-  const currentTabId = data.find(ch => ch.id === activeSubTab) ? activeSubTab : (data.length > 0 ? data[0].id : null);
-  const activeChecklist = data.find(ch => ch.id === currentTabId);
+  const currentTabId = activeSubTab === 'shabiller' ? 'shabiller' : (data.find(ch => ch.id === activeSubTab) ? activeSubTab : (data.length > 0 ? data[0].id : 'shabiller'));
+  const activeChecklist = currentTabId !== 'shabiller' ? data.find(ch => ch.id === currentTabId) : null;
 
   return (
     <div className="section-container">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-        <h2>📝 Affaires à ramener</h2>
+        <h2>📝 Thématiques Personnel</h2>
         <div style={{ display: 'flex', gap: '0.5rem' }}>
           <input 
             type="text" 
@@ -44,22 +45,60 @@ export function PersonnelSection({ data, onToggle, onAdd, onDelete, onAddSection
         </div>
       </div>
 
-      {data.length > 0 && (
-        <div className="tabs-nav" style={{ justifyContent: 'flex-start', overflowX: 'auto', marginBottom: '1rem', padding: '0.5rem', background: 'transparent', border: 'none' }}>
-          {data.map(checklist => (
-            <button
-              key={checklist.id}
-              className={`tab-btn ${activeChecklist?.id === checklist.id ? 'active' : ''}`}
-              onClick={() => setActiveSubTab(checklist.id)}
-              style={{ padding: '0.5rem 1rem', fontSize: '0.9rem', whiteSpace: 'nowrap' }}
-            >
-              {checklist.title}
-            </button>
-          ))}
-        </div>
-      )}
+      <div className="tabs-nav" style={{ justifyContent: 'flex-start', overflowX: 'auto', marginBottom: '1rem', padding: '0.5rem', background: 'transparent', border: 'none' }}>
+        <button
+          className={`tab-btn ${currentTabId === 'shabiller' ? 'active' : ''}`}
+          onClick={() => setActiveSubTab('shabiller')}
+          style={{ padding: '0.5rem 1rem', fontSize: '0.9rem', whiteSpace: 'nowrap' }}
+        >
+          👕 S'habiller
+        </button>
+        {data.map(checklist => (
+          <button
+            key={checklist.id}
+            className={`tab-btn ${currentTabId === checklist.id ? 'active' : ''}`}
+            onClick={() => setActiveSubTab(checklist.id)}
+            style={{ padding: '0.5rem 1rem', fontSize: '0.9rem', whiteSpace: 'nowrap' }}
+          >
+            {checklist.title}
+          </button>
+        ))}
+      </div>
 
-      {activeChecklist ? (
+      {currentTabId === 'shabiller' ? (
+        <div className="card" style={{ animation: 'fadeIn 0.3s ease' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+            
+            {/* Conseils */}
+            <div className="glass-panel">
+              <h4 style={{ color: 'var(--primary)', marginBottom: '1rem' }}>Matières & Couleurs</h4>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                <li style={{ marginBottom: '0.8rem', display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
+                  <span style={{ color: 'var(--accent)' }}>⚠️</span>
+                  <span><strong>Éviter le polyester</strong> : ça fait transpirer et ce n'est pas agréable au contact de la peau.</span>
+                </li>
+                <li style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
+                  <span style={{ color: 'var(--success)' }}>✨</span>
+                  <span>La <strong>couleur abricot</strong> est magnifique.</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Tailles Vêtements */}
+            <div className="glass-panel">
+              <h4 style={{ color: 'var(--primary)', marginBottom: '1rem' }}>Mes Tailles (D'après la 1ère image)</h4>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.8rem', background: 'rgba(0,0,0,0.2)', borderRadius: '8px' }}>
+                <span style={{ fontWeight: 'bold' }}>👖 Pantalon</span>
+                <div style={{ textAlign: 'right' }}>
+                  <div><strong style={{ fontSize: '1.2rem' }}>48 FR</strong></div>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Étiquette : 32</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      ) : activeChecklist ? (
         <div className="card">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
             <h3 style={{ margin: 0 }}>{activeChecklist.title}</h3>
@@ -113,11 +152,7 @@ export function PersonnelSection({ data, onToggle, onAdd, onDelete, onAddSection
             </button>
           </div>
         </div>
-      ) : (
-        <div className="card" style={{ textAlign: 'center', color: 'var(--text-muted)' }}>
-          Créez une thématique pour commencer.
-        </div>
-      )}
+      ) : null}
     </div>
   );
 }
