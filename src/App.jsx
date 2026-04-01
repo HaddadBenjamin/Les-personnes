@@ -13,7 +13,7 @@ import { BirthdaySection } from './components/Birthdays/BirthdaySection'
 import { ContactSection } from './components/Contacts/ContactSection'
 
 const TABS = [
-  { id: 'personnel', label: 'Personnel', icon: User, emoji: '👤' },
+  { id: 'personnel', label: 'Mes Affaires', icon: User, emoji: '🎒' },
   { id: 'anniversaires', label: 'Anniversaires', icon: Cake, emoji: '🎂' },
   { id: 'contacts', label: 'Contacts', icon: Contact, emoji: '📇' },
 ]
