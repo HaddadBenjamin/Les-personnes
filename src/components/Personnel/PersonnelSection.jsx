@@ -41,6 +41,12 @@ export function PersonnelSection({ data, onToggle, onAdd, onDelete, onAddSection
         >
           👕 S'habiller
         </button>
+        <button
+          className={`tab-btn ${activeMainTab === 'cave' ? 'active' : ''}`}
+          onClick={() => setActiveMainTab('cave')}
+        >
+          📦 Ma Cave
+        </button>
       </div>
 
       {activeMainTab === 'shabiller' && (
@@ -209,6 +215,31 @@ export function PersonnelSection({ data, onToggle, onAdd, onDelete, onAddSection
               Créez une liste pour commencer.
             </div>
           )}
+        </div>
+      )}
+
+      {activeMainTab === 'cave' && (
+        <div className="card" style={{ animation: 'fadeIn 0.3s ease', maxWidth: '600px', margin: '0 auto' }}>
+          <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            📦 Contenu de la cave
+          </h3>
+          <div className="glass-panel">
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              {['Cartons', 'Ventilateur', 'Sapin', 'Guirlandes', 'Ordinateurs et chargeurs', '3 chaises'].map((item, i) => (
+                <li key={i} style={{ 
+                  padding: '0.8rem 0', 
+                  borderBottom: i !== 5 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.8rem',
+                  fontSize: '1.05rem'
+                }}>
+                  <span style={{ color: 'var(--accent)', fontSize: '1.2rem' }}>•</span> 
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       )}
     </div>
